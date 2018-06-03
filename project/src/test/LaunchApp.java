@@ -1,0 +1,208 @@
+package test;
+
+import static org.testng.Assert.assertEquals;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
+
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.MultiTouchAction;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.functions.ExpectedCondition;
+
+public class LaunchApp {
+	
+	public static AppiumDriver<MobileElement> driver=null;
+	@BeforeTest
+	public static void setup()
+	{
+		DesiredCapabilities caps = new DesiredCapabilities();
+		caps.setCapability("deviceName", "My Phone");
+		caps.setCapability("udid", "4df769d369cb21c7"); //Give Device ID of your mobile phone
+		caps.setCapability("platformName", "Android");
+		caps.setCapability("platformVersion", "6.0");
+		caps.setCapability("appPackage", "com.google.android.gm");
+		caps.setCapability("appActivity", "com.android.mail.ui.MailActivity");
+		caps.setCapability("noReset", "true");
+		
+		//Instantiate Appium Driver
+		
+				 try {
+					 
+					driver = new AndroidDriver<MobileElement>(new URL("http://0.0.0.0:4723/wd/hub"), caps);
+					
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+	}
+//	@Test
+	public static void DialPad() throws InterruptedException
+	{
+		driver.findElementById("com.android.contacts:id/tab_custom_view_icon").click();
+		driver.findElementByAccessibilityId("Nine").click();
+		driver.findElementByAccessibilityId("Eight").click();
+		driver.findElementByAccessibilityId("Nine").click();
+		driver.findElementByAccessibilityId("Zero").click();
+		driver.findElementByAccessibilityId("Nine").click();
+		driver.findElementByAccessibilityId("Eight").click();
+		driver.findElementByAccessibilityId("Three").click();
+		driver.findElementByAccessibilityId("Eight").click();
+		driver.findElementByAccessibilityId("Five").click();
+		driver.findElementByAccessibilityId("Seven").click();
+		driver.findElementByAccessibilityId("Call").click();
+		Thread.sleep(5000);
+		String message=	driver.findElementById("android:id/message").getText();
+		System.out.println("Error message appear is "+ message);
+		WebDriverWait wait=new WebDriverWait(driver,10);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("android:id/button1"))).click();
+				
+	}
+	
+	
+	//@Test //not working as expected
+	public static void Pinch()
+	{
+		driver.navigate().back();
+		TouchAction actionOne = new TouchAction(driver);
+		actionOne.tap(100, 400);
+		//actionOne.moveTo(300, 400);
+		//actionOne.release();
+		TouchAction actionTwo = new TouchAction(driver);
+		actionTwo.tap(500, 400);
+	//	actionTwo.moveTo(300, 400);
+	//	actionTwo.release();
+		MultiTouchAction action = new MultiTouchAction(driver);
+		action.add(actionOne.moveTo(300, 400));
+		action.add(actionTwo);
+		action.perform();
+		
+
+		
+	}
+	//@Test
+	public static void VerticleSwipe() throws InterruptedException
+	{
+		
+		TouchAction touch=new TouchAction(driver);
+		driver.findElementByAccessibilityId("Logs Tab 2 of 4").click();
+	WebElement contact=driver.findElementById("com.android.contacts:id/nameText");
+	JavascriptExecutor js=(JavascriptExecutor)driver;
+     js.executeScript("arguments[0].scrollIntoView(true);", contact);
+     
+		/*Dimension size;
+       size=driver.manage().window().getSize();
+       int startX = size.getWidth () / 2;
+       int startY = size.getHeight () / 2;
+       int endX = 0;
+       int endY = (int) (startY * -1 * 0.75);
+       touch.press(startX, startY).moveTo(endX, endY).perform();*/
+              
+	}
+	//@Test
+	public static void OpenGmail() throws InterruptedException
+	{
+		driver.navigate().back();
+		driver.findElementByAccessibilityId("Apps").click();
+		driver.findElementByAccessibilityId("Gmail").click();
+		driver.findElementByAccessibilityId("Compose").click();
+		WebDriverWait wait=new WebDriverWait(driver,20);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("com.google.android.gm:id/to")));
+		driver.findElementById("com.google.android.gm:id/to").sendKeys("amit.thakare28@gmail.com");
+		driver.findElementById("com.google.android.gm:id/subject").click();
+		driver.findElementById("com.google.android.gm:id/subject").sendKeys("This msg generated by automation");
+		driver.findElementById("com.google.android.gm:id/composearea_tap_trap_bottom").click();
+		driver.findElementById("com.google.android.gm:id/composearea_tap_trap_bottom").sendKeys("Test Mail by automation");
+		driver.findElementByAccessibilityId("Send").click();
+		driver.findElementByAccessibilityId("Open navigation drawer").click();
+		/*TouchAction SendTab=new TouchAction(driver);
+		WebElement Send=driver.findElementById("com.google.android.gm:id/name");
+		SendTab.longPress(Send,Duration.ofMillis(2000)).perform().release();
+		//SendTab.tap(Send).perform();
+		
+		String SentMsg=driver.findElementByAccessibilityId("Unread me, This msg generated by automation, Test Mail by automation,  at 6:32 PM, labels: Inbox, Personal, ").getText();
+		if(SentMsg.contains("This msg generated by automation"))
+		{
+			TouchAction delete=new TouchAction(driver);
+			WebElement DeleteMail=driver.findElementByAccessibilityId("Unread me, This msg generated by automation, Test Mail by automation,  at 6:32 PM, labels: Inbox, Personal, ");
+			delete.longPress(DeleteMail,Duration.ofMillis(3000)).perform().release();
+			driver.findElementByAccessibilityId("Delete").click();
+		}
+		
+*/		
+		
+		
+	}
+	@Test
+	public static void SearchMail()
+	{
+		TouchAction delete=new TouchAction(driver);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.findElementByAccessibilityId("Search").click();
+		//driver.findElementById("com.google.android.gm:id/search_actionbar_query_text").click();
+		driver.findElementById("com.google.android.gm:id/search_actionbar_query_text").sendKeys("This msg generated by automation");
+		//driver.findElementById("com.google.android.gm:id/search_actionbar_query_text").sendKeys(Keys.ENTER);
+		List<MobileElement>msgs=driver.findElementsByClassName("android.view.View");
+		for(int i=0;i<msgs.size();i++)
+		{
+			if(msgs.get(i).getText().contains("This msg generated by automation"))
+			{
+				delete.longPress(msgs.get(i),Duration.ofMillis(3000)).perform().release();
+			}
+		}
+		
+	}
+	
+//	@Test
+	public static void DeleteApp()
+	{
+		driver.navigate().back();
+		TouchAction touch=new TouchAction(driver);
+		WebElement app=driver.findElementByAccessibilityId("WhatsApp");
+		touch.longPress(app, Duration.ofMillis(6000)).perform();
+		WebElement remove=driver.findElementById("com.sec.android.app.launcher:id/delete");
+		touch.moveTo(remove).release().perform();
+		}
+	
+	
+	
+	public static void InstallApp()
+	{
+		driver.findElement(By.id("com.android.vending:id/search_box_idle_text")).click();
+		driver.findElementById("com.android.vending:id/search_box_text_input").sendKeys("whatsapp");
+		//driver.findElement(By.id("com.android.vending:id/search_box_text_input")).sendKeys(Keys.ENTER);
+WebDriverWait wait=new WebDriverWait(driver,20);
+wait.until(ExpectedConditions.visibilityOfElementLocated(By	.id("com.android.vending:id/title"))).click();
+		//driver.findElementById("com.android.vending:id/title").click();
+		driver.findElementByClassName("android.widget.Button").click();
+		driver.findElementById("com.android.vending:id/continue_button").click();
+	}
+
+		
+		
+				
+			
+		
+		
+	}
+
+

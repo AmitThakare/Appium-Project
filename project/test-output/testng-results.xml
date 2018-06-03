@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="41531" started-at="2018-06-02T15:01:10Z" finished-at="2018-06-02T15:01:51Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="41531" started-at="2018-06-02T15:01:10Z" finished-at="2018-06-02T15:01:51Z">
+      <class name="test.LaunchApp">
+        <test-method status="PASS" signature="setup()[pri:0, instance:test.LaunchApp@148080bb]" name="setup" is-config="true" duration-ms="29000" started-at="2018-06-02T20:31:10Z" finished-at="2018-06-02T20:31:39Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method status="PASS" signature="SearchMail()[pri:0, instance:test.LaunchApp@148080bb]" name="SearchMail" duration-ms="12493" started-at="2018-06-02T20:31:39Z" finished-at="2018-06-02T20:31:51Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- SearchMail -->
+      </class> <!-- test.LaunchApp -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
